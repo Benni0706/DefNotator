@@ -2,8 +2,8 @@ import { Application, Request, Response } from "express";
 
 module.exports = function (app: Application) {
 
-    app.get('/test', function (req: Request, res: Response) {
-        res.send('Guten Tag, API am Hörer. Wie kann ich Ihnen weiterhelfen?');
+    app.get('/test', function (req, res) {
+        res.send('Guten Tag, API am Hï¿½rer. Wie kann ich Ihnen weiterhelfen?');
     });
 
 }

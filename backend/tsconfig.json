@@ -6,6 +6,6 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    //"outDir": "./dist" //Not needed, using compiler instead of transpiler atm (may change)
+    //"outDir": "./dist" //Not needed, using compiler instead of transpiler atm (I think??? I have no idea how this works...)
   }
 }
