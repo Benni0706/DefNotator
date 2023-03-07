@@ -1,9 +1,12 @@
-import { Application, Request, Response } from "express";
+import { Application} from "express";
+const {getTests} = require("../database/database");
 
 module.exports = function (app: Application) {
 
     app.get('/test', function (req, res) {
-        res.send('Guten Tag, API am H�rer. Wie kann ich Ihnen weiterhelfen?');
+        getTests(function(rows: any) {
+            res.send(rows);
+        })
     });
 
 }
