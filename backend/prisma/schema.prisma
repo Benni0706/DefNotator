@@ -11,74 +11,74 @@ datasource db {
 }
 
 model Dataset {
-  id Int @id @default(autoincrement())
-  name String
-  owner User @relation(fields: [ownerId], references: [id])
-  ownerId Int
+  id          Int                   @id @default(autoincrement())
+  name        String
+  owner       User                  @relation(fields: [ownerId], references: [id])
+  ownerId     Int
   annotations Annotation[]
-  criteria CriteriaInDataset[]
+  criteria    CriteriaInDataset[]
   definitions DefinitionInDataset[]
-  access Access[]
+  access      Access[]
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String
-  email String
+  id            Int       @id @default(autoincrement())
+  name          String
+  email         String
   sessionCookie Int
-  password String
-  datasets Dataset[]
-  access Access[]
+  password      String
+  datasets      Dataset[]
+  access        Access[]
 }
 
 model Criteria {
-  id Int @id @default(autoincrement())
-  content String
+  id          Int                 @id @default(autoincrement())
+  content     String
   annotations Annotation[]
-  datasets CriteriaInDataset[]
+  datasets    CriteriaInDataset[]
 }
 
 model Definition {
-  id Int @id @default(autoincrement())
-  content String
+  id          Int                   @id @default(autoincrement())
+  content     String
   annotations Annotation[]
-  datasets DefinitionInDataset[]
+  datasets    DefinitionInDataset[]
 }
 
 model Annotation {
-  criteria Criteria @relation(fields: [criteriaId], references: [id])
-  criteriaId Int
-  definition Definition @relation(fields: [definitionId], references: [id])
+  criteria     Criteria   @relation(fields: [criteriaId], references: [id])
+  criteriaId   Int
+  definition   Definition @relation(fields: [definitionId], references: [id])
   definitionId Int
-  dataset Dataset @relation(fields: [datasetId], references: [id])
-  datasetId Int
+  dataset      Dataset    @relation(fields: [datasetId], references: [id])
+  datasetId    Int
 
   @@id([criteriaId, definitionId, datasetId])
 }
 
 model Access {
-  user User @relation(fields: [userId], references: [id])
-  userId Int
-  dataset Dataset @relation(fields: [datasetId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  dataset   Dataset @relation(fields: [datasetId], references: [id])
   datasetId Int
 
   @@id([userId, datasetId])
 }
 
 model CriteriaInDataset {
-  criteria Criteria @relation(fields: [criteriaId], references: [id])
+  criteria   Criteria @relation(fields: [criteriaId], references: [id])
   criteriaId Int
-  dataset Dataset @relation(fields: [datasetId], references: [id])
-  datasetId Int
+  dataset    Dataset  @relation(fields: [datasetId], references: [id])
+  datasetId  Int
 
   @@id([criteriaId, datasetId])
 }
 
 model DefinitionInDataset {
-  definition Definition @relation(fields: [definitionId], references: [id])
+  definition   Definition @relation(fields: [definitionId], references: [id])
   definitionId Int
-  dataset Dataset @relation(fields: [datasetId], references: [id])
-  datasetId Int
+  dataset      Dataset    @relation(fields: [datasetId], references: [id])
+  datasetId    Int
 
   @@id([definitionId, datasetId])
 }
