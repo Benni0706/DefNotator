@@ -9,3 +9,76 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Dataset {
+  id Int @id @default(autoincrement())
+  name String
+  owner User @relation(fields: [ownerId], references: [id])
+  ownerId Int
+  annotations Annotation[]
+  criteria CriteriaInDataset[]
+  definitions DefinitionInDataset[]
+  access Access[]
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  name String
+  email String
+  sessionCookie Int
+  password String
+  datasets Dataset[]
+  access Access[]
+}
+
+model Criteria {
+  id Int @id @default(autoincrement())
+  content String
+  annotations Annotation[]
+  datasets CriteriaInDataset[]
+}
+
+model Definition {
+  id Int @id @default(autoincrement())
+  content String
+  annotations Annotation[]
+  datasets DefinitionInDataset[]
+}
+
+model Annotation {
+  criteria Criteria @relation(fields: [criteriaId], references: [id])
+  criteriaId Int
+  definition Definition @relation(fields: [definitionId], references: [id])
+  definitionId Int
+  dataset Dataset @relation(fields: [datasetId], references: [id])
+  datasetId Int
+
+  @@id([criteriaId, definitionId, datasetId])
+}
+
+model Access {
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  dataset Dataset @relation(fields: [datasetId], references: [id])
+  datasetId Int
+
+  @@id([userId, datasetId])
+}
+
+model CriteriaInDataset {
+  criteria Criteria @relation(fields: [criteriaId], references: [id])
+  criteriaId Int
+  dataset Dataset @relation(fields: [datasetId], references: [id])
+  datasetId Int
+
+  @@id([criteriaId, datasetId])
+}
+
+model DefinitionInDataset {
+  definition Definition @relation(fields: [definitionId], references: [id])
+  definitionId Int
+  dataset Dataset @relation(fields: [datasetId], references: [id])
+  datasetId Int
+
+  @@id([definitionId, datasetId])
+}
