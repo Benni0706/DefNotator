@@ -103,4 +103,20 @@ router.delete('/', getUserId, async (req: Request, res: Response) => {
     }
 });
 
+router.get('/datasets', getUserId, async (req: Request, res: Response) => {
+    const datasets = await prisma.user.findUnique({
+        where: {
+            name: res.locals.userId,
+        },
+        select: {
+            datasets: {
+                select: {
+                    name: true
+                }
+            }
+        }
+    });
+    res.send(datasets);
+});
+
 module.exports = router;
