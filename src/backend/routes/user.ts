@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { PrismaClient } from '@prisma/client'
 import { randomBytes, pbkdf2Sync } from "crypto";
+import { getUserId } from '../modules/sessionTokenMiddleware';
 
 const prisma = new PrismaClient();
 const express = require('express');
@@ -20,8 +21,8 @@ router.post('/add', async (req: Request, res: Response) => {
                 email: req.query.email.toString(),
                 password: passwordHash,
                 salt: salt,
-                sessionToken: token,
-            },
+                sessionToken: token
+            }
         });
         res.cookie('sessionToken', newuser.sessionToken);
         res.end();
@@ -30,17 +31,40 @@ router.post('/add', async (req: Request, res: Response) => {
     }
 });
 
+router.get('', getUserId, async (req: Request, res: Response) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            id: res.locals.userId
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true
+        }
+    });
+    res.send(user);
+});
+
 router.post('/login', async (req: Request, res: Response) => {
-    if (req.query.name && req.query.password) {
+    if (req.body.name && req.body.password) {
         const user = await prisma.user.findUnique({
             where: {
-                name: req.query.name.toString()
-            },
+                name: req.body.name.toString()
+            }
         });
         if (user) {
-            let passwordHash = pbkdf2Sync(req.query.password.toString(), user.salt, 1000, 64, `sha512`).toString(`hex`);
+            let passwordHash = pbkdf2Sync(req.body.password.toString(), user.salt, 1000, 64, `sha512`).toString(`hex`);
             if (passwordHash === user.password) {
-                res.cookie('sessionToken', user.sessionToken);
+                const token: string = randomBytes(256).toString('hex');
+                const updatedUser = await prisma.user.update({
+                    where: {
+                        id: user.id
+                    },
+                    data: {
+                        sessionToken: token
+                    }
+                });
+                res.cookie('sessionToken', updatedUser.sessionToken);
                 res.end();
             } else {
                 res.status(401).end();
@@ -49,46 +73,33 @@ router.post('/login', async (req: Request, res: Response) => {
             res.status(404).send('User not found')
         }
     } else {
-        res.send('parameter missing');
+        res.status(400).send('parameter missing');
     }
 });
 
-//authentification missing !!!IMPORTANT!!!
-router.get('/:username/datasets', async (req: Request, res: Response) => {
-    if (req.params.username) {
-        const datasets = await prisma.user.findUnique({
-            where: {
-                name: req.params.username,
-            },
-            select: {
-                datasets: {
-                    select: {
-                        name: true,
-                    },
-                },
-            },
-        });
-        res.send(datasets);
-    } else {
-        res.send('username parameter missing');
-    }
-});
-
-//authentification missing !!!IMPORTANT!!!
-router.delete('/:username', async (req: Request, res: Response) => {
-    if (req.params.username) {
-        try{
-            await prisma.user.delete({
-                where: {
-                    name: req.params.username,
-                },
-            });
-            res.end();
-        } catch {
-            res.status(404).send('user not found');
+router.post('/logout', getUserId, async (req: Request, res: Response) => {
+    await prisma.user.update({
+        where: {
+            id: res.locals.userId
+        },
+        data: {
+            sessionToken: null
         }
-    } else {
-        res.send('username parameter missing');
+    });
+    res.clearCookie('sessionToken');
+    res.end();
+});
+
+router.delete('/', getUserId, async (req: Request, res: Response) => {
+    try{
+        await prisma.user.delete({
+            where: {
+                id: res.locals.userId
+            }
+        });
+        res.end();
+    } catch(e) {
+        res.status(404).send('user not found');
     }
 });
 
