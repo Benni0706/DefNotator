@@ -3,31 +3,37 @@ import { PrismaClient } from '@prisma/client'
 import { randomBytes, pbkdf2Sync } from "crypto";
 import { getUserId } from '../modules/sessionTokenMiddleware';
 
+const cookieParser = require('cookie-parser');
 const prisma = new PrismaClient();
 const express = require('express');
 const router = express.Router();
 
+router.use(cookieParser());
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
 router.post('/add', async (req: Request, res: Response) => {
-    if (req.query.name && req.query.password && req.query.email) {
-        const token: string = randomBytes(256).toString('hex');
-        const salt = randomBytes(16).toString('hex');
-        const passwordHash = pbkdf2Sync(req.query.password.toString(), salt, 1000, 64, `sha512`).toString(`hex`);
-        const newuser = await prisma.user.create({
-            data: {
-                name: req.query.name.toString(),
-                email: req.query.email.toString(),
-                password: passwordHash,
-                salt: salt,
-                sessionToken: token
-            }
-        });
-        res.cookie('sessionToken', newuser.sessionToken);
-        res.end();
-    } else {
-        res.send('parameter missing');
+    try {
+        if (req.query.name && req.query.password && req.query.email) {
+            const token: string = randomBytes(256).toString('hex');
+            const salt = randomBytes(16).toString('hex');
+            const passwordHash = pbkdf2Sync(req.query.password.toString(), salt, 1000, 64, `sha512`).toString(`hex`);
+            const newuser = await prisma.user.create({
+                data: {
+                    name: req.query.name.toString(),
+                    email: req.query.email.toString(),
+                    password: passwordHash,
+                    salt: salt,
+                    sessionToken: token
+                }
+            });
+            res.cookie('sessionToken', newuser.sessionToken);
+            res.end();
+        } else {
+            res.send('parameter missing');
+        }
+    } catch (err) {
+        res.status(404).end();
     }
 });
 
@@ -91,14 +97,14 @@ router.post('/logout', getUserId, async (req: Request, res: Response) => {
 });
 
 router.delete('/', getUserId, async (req: Request, res: Response) => {
-    try{
+    try {
         await prisma.user.delete({
             where: {
                 id: res.locals.userId
             }
         });
         res.end();
-    } catch(e) {
+    } catch (e) {
         res.status(404).send('user not found');
     }
 });
@@ -106,7 +112,7 @@ router.delete('/', getUserId, async (req: Request, res: Response) => {
 router.get('/datasets', getUserId, async (req: Request, res: Response) => {
     const datasets = await prisma.user.findUnique({
         where: {
-            name: res.locals.userId,
+            id: res.locals.userId,
         },
         select: {
             datasets: {

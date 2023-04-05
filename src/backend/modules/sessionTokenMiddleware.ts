@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient();
 
 export async function getUserId(req: Request, res: Response, next: NextFunction) {
-    const token: string = req.cookies.sessionToken;
+    const token: string = req.cookies.sessionToken; 
     if (token) {
         const user = await prisma.user.findUnique({
             where: {
