@@ -1,3 +1,9 @@
+/*
+This method reads the sessionToken from the cookie of a HTTP Request. It then checks, if the sessionToken is valid.
+If its valid, the next route handler is being called (for example "GET /users/datasets").
+If its not valid, it sends back a 401 Unauthorized response and does NOT call the next route handler.
+The function is being exported, which means it can be imported in other files. It can then be used as middleware.
+*/
 import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from '@prisma/client'
 
