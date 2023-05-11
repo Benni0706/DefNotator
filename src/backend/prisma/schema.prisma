@@ -11,39 +11,37 @@ datasource db {
 }
 
 model Dataset {
-  id          Int                   @id @default(autoincrement())
-  name        String                @unique
-  owner       User                  @relation(fields: [ownerId], references: [id])
-  ownerId     Int
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
   annotations Annotation[]
-  criteria    CriteriaInDataset[]
-  definitions DefinitionInDataset[]
+  criteria    Criteria[]
+  definitions Definition[]
   access      Access[]
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  name         String    @unique
+  id           Int          @id @default(autoincrement())
+  name         String       @unique
   email        String
-  sessionToken String?   @unique
+  sessionToken String?      @unique
   salt         String
   password     String
-  datasets     Dataset[]
   access       Access[]
+  annotations  Annotation[]
 }
 
 model Criteria {
-  id          Int                 @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   content     String
   annotations Annotation[]
-  datasets    CriteriaInDataset[]
+  datasets    Dataset[]
 }
 
 model Definition {
-  id          Int                   @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   content     String
   annotations Annotation[]
-  datasets    DefinitionInDataset[]
+  datasets    Dataset[]
 }
 
 model Annotation {
@@ -53,6 +51,8 @@ model Annotation {
   definitionId Int
   dataset      Dataset    @relation(fields: [datasetId], references: [id])
   datasetId    Int
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int
 
   @@id([criteriaId, definitionId, datasetId])
 }
@@ -62,24 +62,7 @@ model Access {
   userId    Int
   dataset   Dataset @relation(fields: [datasetId], references: [id])
   datasetId Int
+  role      String  @default("USER")
 
   @@id([userId, datasetId])
-}
-
-model CriteriaInDataset {
-  criteria   Criteria @relation(fields: [criteriaId], references: [id])
-  criteriaId Int
-  dataset    Dataset  @relation(fields: [datasetId], references: [id])
-  datasetId  Int
-
-  @@id([criteriaId, datasetId])
-}
-
-model DefinitionInDataset {
-  definition   Definition @relation(fields: [definitionId], references: [id])
-  definitionId Int
-  dataset      Dataset    @relation(fields: [datasetId], references: [id])
-  datasetId    Int
-
-  @@id([definitionId, datasetId])
 }
