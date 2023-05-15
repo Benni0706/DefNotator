@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { PrismaClient } from '@prisma/client'
 import { randomBytes, pbkdf2Sync } from "crypto";
 import { getUserId } from '../modules/sessionTokenMiddleware';
-import { access } from "fs";
 
 const cookieParser = require('cookie-parser');
 const prisma = new PrismaClient();

@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from '@prisma/client'
 import { getUserId } from '../modules/sessionTokenMiddleware';
-import { access } from "fs";
 
 const cookieParser = require('cookie-parser');
 const prisma = new PrismaClient();
@@ -21,7 +20,7 @@ router.post('/add', async (req: Request, res: Response) => {
             }
         });
         if (!existingDataset) {
-            const newdataset = await prisma.dataset.create({
+            const newDataset = await prisma.dataset.create({
                 data: {
                     name: req.query.name.toString(),
                     access: {
