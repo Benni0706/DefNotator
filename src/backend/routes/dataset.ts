@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from '@prisma/client'
 import { getUserId } from '../modules/sessionTokenMiddleware';
-import { access } from "fs";
 
 const cookieParser = require('cookie-parser');
 const prisma = new PrismaClient();
@@ -15,13 +14,13 @@ router.use(getUserId);
 
 router.post('/add', async (req: Request, res: Response) => {
     if (req.query.name) {
-        const existingDataset = await prisma.dataset.findFirst({
+        const existingDataset = await prisma.dataset.findUnique({
             where: {
-                name: req.query.name?.toString()
+                name: req.query.name.toString()
             }
         });
         if (!existingDataset) {
-            const newdataset = await prisma.dataset.create({
+            const newDataset = await prisma.dataset.create({
                 data: {
                     name: req.query.name.toString(),
                     access: {
@@ -48,69 +47,87 @@ router.post('/add', async (req: Request, res: Response) => {
 });
 
 router.get('/:datasetName/definitions', async (req: Request, res: Response) => {
-    const definitions = await prisma.access.findFirst({
-        where: {
-            user: {
-                id: res.locals.userId
+    if (req.params.datasetName) {
+        const definitions = await prisma.access.findFirst({
+            where: {
+                user: {
+                    id: res.locals.userId
+                },
+                dataset: {
+                    name: req.params.datasetName
+                }
             },
-            dataset: {
-                name: req.params.datasetName
-            }
-        },
-        select: {
-            dataset: {
-                select: {
-                    definitions: {
-                        select: {
-                            content: true
+            select: {
+                dataset: {
+                    select: {
+                        definitions: {
+                            select: {
+                                content: true
+                            }
                         }
                     }
                 }
             }
-        }
-    });
-    res.send(definitions?.dataset.definitions);
+        });
+        res.send(definitions?.dataset.definitions);
+    } else {
+        res.status(400).send('parameter missing');
+    }
 });
 
 router.get('/:datasetName/criteria', async (req: Request, res: Response) => {
-    const criteria = await prisma.access.findFirst({
-        where: {
-            user: {
-                id: res.locals.userId
+    if (req.params.datasetName) {
+        const criteria = await prisma.access.findFirst({
+            where: {
+                user: {
+                    id: res.locals.userId
+                },
+                dataset: {
+                    name: req.params.datasetName
+                }
             },
-            dataset: {
-                name: req.params.datasetName
-            }
-        },
-        select: {
-            dataset: {
-                select: {
-                    criteria: {
-                        select: {
-                            content: true
+            select: {
+                dataset: {
+                    select: {
+                        criteria: {
+                            select: {
+                                content: true
+                            }
                         }
                     }
                 }
             }
-        }
-    });
-    res.send(criteria?.dataset.criteria);
+        });
+        res.send(criteria?.dataset.criteria);
+    } else {
+        res.status(400).send('parameter missing');
+    }
 });
 
 router.delete('/:datasetName', async (req: Request, res: Response) => {
-    const dataset = await prisma.dataset.findUnique({
-        where: {
-            name: req.params.datasetName
-        }
-    });
-    if (dataset) {
-        await prisma.dataset.delete({
+    if (req.params.datasetName) {
+        const access = await prisma.access.findFirst({
             where: {
-                name: req.params.datasetNamw
+                user: {
+                    id: res.locals.userId
+                },
+                dataset: {
+                    name: req.params.datasetName
+                }
             }
         });
+        if (access) {
+            await prisma.dataset.delete({
+                where: {
+                    name: req.params.datasetName
+                }
+            });
+            res.end();
+        } else {
+            res.status(404).send('dataset not found');
+        }
     } else {
-        res.status(404).send('dataset not found');
+        res.status(400).send('parameter missing');
     }
 });
 

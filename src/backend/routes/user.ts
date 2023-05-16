@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { PrismaClient } from '@prisma/client'
 import { randomBytes, pbkdf2Sync } from "crypto";
 import { getUserId } from '../modules/sessionTokenMiddleware';
-import { access } from "fs";
 
 const cookieParser = require('cookie-parser');
 const prisma = new PrismaClient();
@@ -114,6 +113,13 @@ router.delete('/', getUserId, async (req: Request, res: Response) => {
                 id: res.locals.userId
             }
         });
+        await prisma.dataset.deleteMany({
+            where: {
+                access: {
+                    none: {}
+                }
+            }
+        });
         res.end();
     } else {
         res.status(404).send('user not found');
@@ -121,14 +127,14 @@ router.delete('/', getUserId, async (req: Request, res: Response) => {
 });
 
 router.get('/datasets', getUserId, async (req: Request, res: Response) => {
-    const datasets = await prisma.access.findFirst({
+    const datasets = await prisma.access.findMany({
         where: {
-            role: "OWNER",
             user: {
                 id: res.locals.userId
             }
         },
         select: {
+            role: true,
             dataset: {
                 select: {
                     name: true
@@ -136,7 +142,7 @@ router.get('/datasets', getUserId, async (req: Request, res: Response) => {
             }
         }
     });
-    res.send(datasets?.dataset);
+    res.send(datasets);
 });
 
 module.exports = router;
