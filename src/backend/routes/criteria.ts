@@ -19,6 +19,7 @@ router.post('/add', async (req: Request, res: Response) => {
                 content: req.query.content.toString()
             }
         });
+        res.end();
     } else {
         res.status(400).send('parameter missing');
     }

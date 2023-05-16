@@ -113,6 +113,13 @@ router.delete('/', getUserId, async (req: Request, res: Response) => {
                 id: res.locals.userId
             }
         });
+        await prisma.dataset.deleteMany({
+            where: {
+                access: {
+                    none: {}
+                }
+            }
+        });
         res.end();
     } else {
         res.status(404).send('user not found');
