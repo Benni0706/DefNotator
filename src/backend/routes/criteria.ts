@@ -25,7 +25,7 @@ router.post('/add', async (req: Request, res: Response) => {
 });
 
 router.post('/assign', async (req: Request, res: Response) => {
-    if (req.query.criteriaId && req.query.datasetName) {
+    if (!isNaN(Number(req.query.criteriaId)) && req.query.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
                 user: {
@@ -51,6 +51,7 @@ router.post('/assign', async (req: Request, res: Response) => {
                     }
                 }
             });
+            res.end();
         } else {
             res.status(401).end();
         }
@@ -65,29 +66,37 @@ router.get('/all', async (req: Request, res: Response) => {
 });
 
 router.get('/:criteriaId', async (req: Request, res: Response) => {
-    const criteria = await prisma.criteria.findUnique({
-        where: {
-            id: Number(req.params.criteriaId)
-        }
-    });
-    res.send(criteria);
-});
-
-router.delete('/:criteriaId', async (req: Request, res: Response) => {
-    const criteria = await prisma.criteria.findUnique({
-        where: {
-            id: Number(req.params.criteriaId)
-        }
-    });
-    if (criteria) {
-        await prisma.criteria.delete({
+    if (!isNaN(Number(req.params.criteriaId))) {
+        const criteria = await prisma.criteria.findUnique({
             where: {
                 id: Number(req.params.criteriaId)
             }
         });
-        res.end();
+        res.send(criteria);
     } else {
-        res.status(404).send('criteria not found');
+        res.status(400).end();
+    }
+});
+
+router.delete('/:criteriaId', async (req: Request, res: Response) => {
+    if (!isNaN(Number(req.params.criteriaId))) {
+        const criteria = await prisma.criteria.findUnique({
+            where: {
+                id: Number(req.params.criteriaId)
+            }
+        });
+        if (criteria) {
+            await prisma.criteria.delete({
+                where: {
+                    id: Number(req.params.criteriaId)
+                }
+            });
+            res.end();
+        } else {
+            res.status(404).send('criteria not found');
+        }
+    } else {
+        res.status(400).end();
     }
 });
 

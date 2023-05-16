@@ -120,14 +120,14 @@ router.delete('/', getUserId, async (req: Request, res: Response) => {
 });
 
 router.get('/datasets', getUserId, async (req: Request, res: Response) => {
-    const datasets = await prisma.access.findFirst({
+    const datasets = await prisma.access.findMany({
         where: {
-            role: "OWNER",
             user: {
                 id: res.locals.userId
             }
         },
         select: {
+            role: true,
             dataset: {
                 select: {
                     name: true
@@ -135,7 +135,7 @@ router.get('/datasets', getUserId, async (req: Request, res: Response) => {
             }
         }
     });
-    res.send(datasets?.dataset);
+    res.send(datasets);
 });
 
 module.exports = router;
