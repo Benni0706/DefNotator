@@ -61,6 +61,42 @@ router.post('/assign', async (req: Request, res: Response) => {
     }
 });
 
+router.post('/unassign', async (req: Request, res: Response) => {
+    if (!isNaN(Number(req.query.criteriaId)) && req.query.datasetName) {
+        const access = await prisma.access.findFirst({
+            where: {
+                user: {
+                    id: res.locals.userId
+                },
+                dataset: {
+                    name: req.query.datasetName.toString()
+                }
+            }
+        });
+        if (access) {
+            await prisma.criteria.update({
+                where: {
+                    id: Number(req.query.criteriaId)
+                },
+                data: {
+                    datasets: {
+                        disconnect: [
+                            {
+                                name: req.query.datasetName.toString()
+                            }
+                        ]
+                    }
+                }
+            });
+            res.end();
+        } else {
+            res.status(401).end();
+        }
+    } else {
+        res.status(400).send('parameter missing');
+    }
+});
+
 router.get('/all', async (req: Request, res: Response) => {
     const criteria = await prisma.criteria.findMany();
     res.send(criteria);
@@ -79,6 +115,8 @@ router.get('/:criteriaId', async (req: Request, res: Response) => {
     }
 });
 
+/*
+ which users should be able to delete which criteria??? for now its just impossible to delete criteria
 router.delete('/:criteriaId', async (req: Request, res: Response) => {
     if (!isNaN(Number(req.params.criteriaId))) {
         const criteria = await prisma.criteria.findUnique({
@@ -100,5 +138,6 @@ router.delete('/:criteriaId', async (req: Request, res: Response) => {
         res.status(400).end();
     }
 });
+*/
 
 module.exports = router;
