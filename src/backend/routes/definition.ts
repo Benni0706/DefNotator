@@ -14,7 +14,7 @@ router.use(getUserId);
 
 router.post('/add', async (req: Request, res: Response) => {
     if (req.query.content) {
-        await prisma.criteria.create({
+        await prisma.definition.create({
             data: {
                 content: req.query.content.toString()
             }
@@ -26,7 +26,7 @@ router.post('/add', async (req: Request, res: Response) => {
 });
 
 router.post('/assign', async (req: Request, res: Response) => {
-    if (!isNaN(Number(req.query.criteriaId)) && req.query.datasetName) {
+    if (!isNaN(Number(req.query.definitionId)) && req.query.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
                 user: {
@@ -38,9 +38,9 @@ router.post('/assign', async (req: Request, res: Response) => {
             }
         });
         if (access) {
-            await prisma.criteria.update({
+            await prisma.definition.update({
                 where: {
-                    id: Number(req.query.criteriaId)
+                    id: Number(req.query.definitionId)
                 },
                 data: {
                     datasets: {
@@ -62,7 +62,7 @@ router.post('/assign', async (req: Request, res: Response) => {
 });
 
 router.post('/unassign', async (req: Request, res: Response) => {
-    if (!isNaN(Number(req.query.criteriaId)) && req.query.datasetName) {
+    if (!isNaN(Number(req.query.definitionId)) && req.query.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
                 user: {
@@ -74,9 +74,9 @@ router.post('/unassign', async (req: Request, res: Response) => {
             }
         });
         if (access) {
-            await prisma.criteria.update({
+            await prisma.definition.update({
                 where: {
-                    id: Number(req.query.criteriaId)
+                    id: Number(req.query.definitionId)
                 },
                 data: {
                     datasets: {
@@ -98,41 +98,41 @@ router.post('/unassign', async (req: Request, res: Response) => {
 });
 
 router.get('/all', async (req: Request, res: Response) => {
-    const criteria = await prisma.criteria.findMany();
-    res.send(criteria);
+    const definitions = await prisma.definition.findMany();
+    res.send(definitions);
 });
 
-router.get('/:criteriaId', async (req: Request, res: Response) => {
-    if (!isNaN(Number(req.params.criteriaId))) {
-        const criteria = await prisma.criteria.findUnique({
+router.get('/:definitionId', async (req: Request, res: Response) => {
+    if (!isNaN(Number(req.params.definitionId))) {
+        const definition = await prisma.definition.findUnique({
             where: {
-                id: Number(req.params.criteriaId)
+                id: Number(req.params.definitionId)
             }
         });
-        res.send(criteria);
+        res.send(definition);
     } else {
         res.status(400).end();
     }
 });
 
 /*
-which users should be able to delete which criteria??? for now its just impossible to delete criteria
-router.delete('/:criteriaId', async (req: Request, res: Response) => {
-    if (!isNaN(Number(req.params.criteriaId))) {
-        const criteria = await prisma.criteria.findUnique({
+which users should be able to delete which definitions??? for now its just impossible to delete definitions
+router.delete('/:definitionId', async (req: Request, res: Response) => {
+    if (!isNaN(Number(req.params.definitionId))) {
+        const definition = await prisma.definition.findUnique({
             where: {
-                id: Number(req.params.criteriaId)
+                id: Number(req.params.definitionId)
             }
         });
-        if (criteria) {
-            await prisma.criteria.delete({
+        if (definition) {
+            await prisma.definition.delete({
                 where: {
-                    id: Number(req.params.criteriaId)
+                    id: Number(req.params.definitionId)
                 }
             });
             res.end();
         } else {
-            res.status(404).send('criteria not found');
+            res.status(404).send('definition not found');
         }
     } else {
         res.status(400).end();
