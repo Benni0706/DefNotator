@@ -79,6 +79,7 @@ router.get('/:criteriaId', async (req: Request, res: Response) => {
     }
 });
 
+
 router.delete('/:criteriaId', async (req: Request, res: Response) => {
     if (!isNaN(Number(req.params.criteriaId))) {
         const criteria = await prisma.criteria.findUnique({
