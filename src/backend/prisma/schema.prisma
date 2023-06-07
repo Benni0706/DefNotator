@@ -53,8 +53,9 @@ model Annotation {
   datasetId    Int
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       Int
+  applies      Boolean
 
-  @@id([criteriaId, definitionId, datasetId])
+  @@id([criteriaId, definitionId, datasetId, userId])
 }
 
 model Access {
