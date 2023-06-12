@@ -131,4 +131,41 @@ router.delete('/:datasetName', async (req: Request, res: Response) => {
     }
 });
 
+router.get('/:datasetName/user', async (req: Request, res: Response) => {
+    if (req.params.datasetName) {
+        const access = await prisma.access.findFirst({
+            where: {
+                user: {
+                    id: res.locals.userId
+                },
+                dataset: {
+                    name: req.params.datasetName
+                }
+            }
+        });
+        if (access) {
+            const user = await prisma.access.findMany({
+                where: {
+                    dataset: {
+                        name: req.params.datasetName
+                    }
+                },
+                select: {
+                    role: true,
+                    user: {
+                        select: {
+                            name: true
+                        }
+                    }
+                }
+            });
+            res.send(user);
+        } else {
+            res.status(401).end();
+        }
+    } else {
+        res.status(400).send('parameter missing');
+    }
+});
+
 module.exports = router;
