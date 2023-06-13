@@ -14,50 +14,64 @@ router.use(getUserId);
 
 router.post('/add', async (req: Request, res: Response) => {
     if (req.query.criteriaId && req.query.definitionId && req.query.datasetName && req.query.applies) {
-        const annotation = await prisma.annotation.count({
+        const access = await prisma.access.findFirst({
             where: {
-                criteria: {
-                        id: Number(req.query.criteriaId)
-                },
-                definition: {
-                        id: Number(req.query.definitionId)
+                user: {
+                    id: res.locals.userId
                 },
                 dataset: {
-                        name: req.query.datasetName.toString()
-                },
-                user: {
-                        id: res.locals.userId
+                    name: req.query.datasetName.toString()
                 }
             }
         });
-        if (annotation == 0) {
-            await prisma.annotation.create({
-                data: {
+        if (access) {
+            const annotation = await prisma.annotation.count({
+                where: {
                     criteria: {
-                        connect: {
-                            id: Number(req.query.criteriaId)
-                        }
+                        id: Number(req.query.criteriaId)
                     },
                     definition: {
-                        connect: {
-                            id: Number(req.query.definitionId)
-                        }
+                        id: Number(req.query.definitionId)
                     },
                     dataset: {
-                        connect: {
-                            name: req.query.datasetName.toString()
-                        }
+                        name: req.query.datasetName.toString()
                     },
                     user: {
-                        connect: {
-                            id: res.locals.userId
-                        }
-                    },
-                    applies: Boolean(req.query.applies)
+                        id: res.locals.userId
+                    }
                 }
             });
+            if (annotation == 0) {
+                await prisma.annotation.create({
+                    data: {
+                        criteria: {
+                            connect: {
+                                id: Number(req.query.criteriaId)
+                            }
+                        },
+                        definition: {
+                            connect: {
+                                id: Number(req.query.definitionId)
+                            }
+                        },
+                        dataset: {
+                            connect: {
+                                name: req.query.datasetName.toString()
+                            }
+                        },
+                        user: {
+                            connect: {
+                                id: res.locals.userId
+                            }
+                        },
+                        applies: Boolean(req.query.applies)
+                    }
+                });
+            } else {
+                res.send('annotation already exists');
+            }
         } else {
-            res.send('annotation already exists');
+            res.status(401).end();
         }
         res.end();
     } else {
