@@ -13,7 +13,7 @@ router.use(express.urlencoded({ extended: true }));
 router.use(getUserId);
 
 router.post('/add', async (req: Request, res: Response) => {
-    if (req.query.criteriaId && req.query.definitionId && req.query.datasetName && req.query.applies) {
+    if (Number(req.query.criteriaId) && Number(req.query.definitionId) && req.query.datasetName && req.query.applies) {
         const access = await prisma.access.findFirst({
             where: {
                 user: {
@@ -80,7 +80,7 @@ router.post('/add', async (req: Request, res: Response) => {
 });
 
 router.post('/update', async (req: Request, res: Response) => {
-    if (req.query.annotationId && req.query.applies) {
+    if (Number(req.query.annotationId) && req.query.applies) {
         const access = await prisma.annotation.findFirst({
             where: {
                 id: Number(req.query.annotationId),
@@ -103,6 +103,23 @@ router.post('/update', async (req: Request, res: Response) => {
         } else {
             res.status(401).end();
         }
+    } else {
+        res.status(400).send('parameter missing');
+    }
+});
+
+router.get('/:annotationId', async (req: Request, res: Response) => {
+    if (Number(req.params.annotationId)) {
+        const annotation = await prisma.annotation.findUnique({
+            where: {
+                id: Number(req.params.annotationId)
+            },
+            select: {
+                id: true,
+                applies: true
+            }
+        });
+        res.send(annotation);
     } else {
         res.status(400).send('parameter missing');
     }
