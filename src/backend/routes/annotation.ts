@@ -64,7 +64,7 @@ router.post('/add', async (req: Request, res: Response) => {
                                 id: res.locals.userId
                             }
                         },
-                        applies: Boolean(req.query.applies)
+                        applies: req.query.applies === 'true' ? true : false
                     }
                 });
             } else {
@@ -74,6 +74,35 @@ router.post('/add', async (req: Request, res: Response) => {
             res.status(401).end();
         }
         res.end();
+    } else {
+        res.status(400).send('parameter missing');
+    }
+});
+
+router.post('/update', async (req: Request, res: Response) => {
+    if (req.query.annotationId && req.query.applies) {
+        const access = await prisma.annotation.findFirst({
+            where: {
+                id: Number(req.query.annotationId),
+                user: {
+                    id: res.locals.userId
+                }
+            }
+        });
+        if (access) {
+            const annotation = await prisma.annotation.update({
+                where: {
+                    id: Number(req.query.annotationId)
+                },
+                data: {
+                    applies: req.query.applies === 'true' ? true : false
+                }
+            });
+            console.log('ey')
+            res.end();
+        } else {
+            res.status(401).end();
+        }
     } else {
         res.status(400).send('parameter missing');
     }
