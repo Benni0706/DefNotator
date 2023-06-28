@@ -26,6 +26,7 @@ const user = require('./routes/user');
 const dataset = require('./routes/dataset');
 const criteria = require('./routes/criteria');
 const definition = require('./routes/definition');
+const annotation = require('./routes/annotation');
 
 //app "uses" routes with route prefix
 app.use('/access', access);
@@ -33,6 +34,7 @@ app.use('/users', user);
 app.use('/datasets', dataset);
 app.use('/criteria', criteria);
 app.use('/definitions', definition);
+app.use('/annotations', annotation);
 
 app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/ you look good today`);

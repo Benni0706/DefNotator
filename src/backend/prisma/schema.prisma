@@ -45,6 +45,7 @@ model Definition {
 }
 
 model Annotation {
+  id           Int        @id @default(autoincrement())
   criteria     Criteria   @relation(fields: [criteriaId], references: [id], onDelete: Cascade)
   criteriaId   Int
   definition   Definition @relation(fields: [definitionId], references: [id], onDelete: Cascade)
@@ -53,8 +54,7 @@ model Annotation {
   datasetId    Int
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       Int
-
-  @@id([criteriaId, definitionId, datasetId])
+  applies      Boolean
 }
 
 model Access {
