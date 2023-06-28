@@ -21,17 +21,19 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 //routes are being imported from route files
+const access = require('./routes/access');
 const user = require('./routes/user');
 const dataset = require('./routes/dataset');
 const criteria = require('./routes/criteria');
 const definition = require('./routes/definition');
 
 //app "uses" routes with route prefix
+app.use('/access', access);
 app.use('/users', user);
 app.use('/datasets', dataset);
 app.use('/criteria', criteria);
 app.use('/definitions', definition);
 
 app.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
+    console.log(`Server running at http://${hostname}:${port}/ you look good today`);
 });

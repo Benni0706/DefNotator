@@ -1,4 +1,4 @@
-import { Request, Response, response } from "express";
+import { Request, Response } from "express";
 import { PrismaClient } from '@prisma/client'
 import { getUserId } from '../modules/sessionTokenMiddleware';
 
@@ -116,7 +116,7 @@ router.get('/:criteriaId', async (req: Request, res: Response) => {
 });
 
 /*
-which users should be able to delete which criteria??? for now its just impossible to delete criteria
+which users should be able to delete which criteria??? for now, it's just impossible to delete criteria
 router.delete('/:criteriaId', async (req: Request, res: Response) => {
     if (!isNaN(Number(req.params.criteriaId))) {
         const criteria = await prisma.criteria.findUnique({
