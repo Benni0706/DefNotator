@@ -1,8 +1,8 @@
-import express from 'express';
-import {getUserId} from '../modules/sessionTokenMiddleware';
+import { getUserId } from '../modules/sessionTokenMiddleware';
 
-const {addAccess, deleteAccess} =  require('../Controller/accessController');
+const { addAccess, deleteAccess } =  require('../Controller/accessController');
 const cookieParser = require('cookie-parser');
+const express = require('express');
 
 const router = express.Router();
 
