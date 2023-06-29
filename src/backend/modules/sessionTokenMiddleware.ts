@@ -18,10 +18,12 @@ export async function getUserId(req: Request, res: Response, next: NextFunction)
             },
             select: {
                 id: true,
+                name: true,
             },
         });
         if(user) {
             res.locals.userId = user.id;
+            res.locals.userName = user.name;
             next();
         } else {
             res.status(401).end();
