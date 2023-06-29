@@ -1,6 +1,6 @@
 import { getUserId } from '../modules/sessionTokenMiddleware';
 
-const { addCriteria, assignCriteria, unassignCriteria, getCriteria, getCriterion } = require('../Controller/criteriaController');
+const { addCriteria, assignCriteria, unassignCriteria, getCriteria, getCriterion } = require('../controller/criteriaController');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 

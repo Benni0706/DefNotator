@@ -1,6 +1,6 @@
 import { getUserId } from '../modules/sessionTokenMiddleware';
 
-const { addDefinition, assignDefinition, unassignDefinition, getDefinitions, getDefinition } = require('../Controller/definitionController')
+const { addDefinition, assignDefinition, unassignDefinition, getDefinitions, getDefinition } = require('../controller/definitionController')
 const cookieParser = require('cookie-parser');
 const express = require('express');
 

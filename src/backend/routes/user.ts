@@ -1,6 +1,6 @@
 import { getUserId } from '../modules/sessionTokenMiddleware';
 
-const { addUser, getUser, login, logout, deleteUser, getDatasetsFromUser } = require('../Controller/userController');
+const { addUser, getUser, login, logout, deleteUser, getDatasetsFromUser } = require('../controller/userController');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const router = express.Router();
