@@ -1,6 +1,6 @@
 import { getUserId } from '../modules/sessionTokenMiddleware';
 
-const { addDataset, getDefinitionsFromDataset, getCriteriaFromDataset, deleteDataset, getUserFromDataset } = require('../Controller/datasetController');
+const { addDataset, getDefinitionsFromDataset, getCriteriaFromDataset, deleteDataset, getUserFromDataset } = require('../controller/datasetController');
 const cookieParser = require('cookie-parser');
 const express = require('express');
 

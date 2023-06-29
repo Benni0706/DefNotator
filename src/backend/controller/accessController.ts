@@ -32,12 +32,10 @@ const addAccess = async (req: Request, res: Response) => {
                 }
             });
             res.end();
-        }
-        else {
+        } else {
             res.status(401).end();
         }
-    }
-    else {
+    } else {
         res.status(400).send("parameter missing");
     }
 }
@@ -55,24 +53,10 @@ const deleteAccess = async (req: Request, res: Response) => {
             }
         });
         if (access) {
-            if (access.role == 'OWNER') {
+            if (access.role == 'OWNER' && res.locals.userName != req.query.userName) {
                 await prisma.access.deleteMany({
                     where: {
                         user: {
-                            name: req.query.userName.toString()
-                        },
-                        dataset: {
-                            name: req.query.datasetName.toString()
-                        },
-                        role: 'USER'
-                    }
-                });
-            }
-            else if (access.role == 'USER') {
-                await prisma.access.deleteMany({
-                    where: {
-                        user: {
-                            id: res.locals.userId,
                             name: req.query.userName.toString()
                         },
                         dataset: {
@@ -80,14 +64,25 @@ const deleteAccess = async (req: Request, res: Response) => {
                         }
                     }
                 });
+            } else if (access.role == 'USER' && res.locals.userName == req.query.userName ) {
+                await prisma.access.deleteMany({
+                    where: {
+                        user: {
+                            id: res.locals.userId
+                        },
+                        dataset: {
+                            name: req.query.datasetName.toString()
+                        }
+                    }
+                });
+            } else {
+                res.status(400).send("can't delete access for this user");
             }
             res.end();
-        }
-        else {
+        } else {
             res.status(401).end();
         }
-    }
-    else {
+    } else {
         res.status(400).send("parameter missing");
     }
 }
