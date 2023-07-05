@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
 import { ref } from 'vue';
+import datasetElement from '../components/datasetElement.vue';
 
 const datasets = ref<JSON>();
 
@@ -26,10 +27,8 @@ getDatasets();
 <template>
   <main class="m-4">
     <h1 class="text-lg">Your datasets:</h1>
-    <div class="bg-gray-200 p-1 border-2">
-      <li v-for="dataset in datasets">
-        {{ dataset }}
-      </li>
+    <div class="flex flex-row flex-wrap">
+      <datasetElement v-for="dataset in datasets" :data="dataset" />
     </div>
   </main>
 </template>
