@@ -3,6 +3,6 @@
 
 <template>
   <main>
-    <h1>Startseite</h1>
+    <h1>Criteria</h1>
   </main>
 </template>
