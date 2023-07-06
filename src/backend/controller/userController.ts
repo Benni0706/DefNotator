@@ -73,7 +73,7 @@ const login = async (req: Request, res: Response) => {
                 res.status(401).end();
             }
         } else {
-            res.status(404).send('User not found')
+            res.status(401).end();
         }
     } else {
         res.status(400).send('parameter missing');
