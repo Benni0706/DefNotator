@@ -2,6 +2,9 @@
 import { RouterLink } from 'vue-router';
 import { ref } from 'vue';
 import datasetElement from '../components/datasetElement.vue';
+import navBar from '../components/navBar.vue';
+
+const props = defineProps(['user']);
 
 const datasets = ref<JSON>();
 
@@ -26,8 +29,8 @@ getDatasets();
 
 <template>
   <main class="m-4">
-    <h1 class="text-lg">Your datasets:</h1>
-    <div class="flex flex-row flex-wrap">
+    <navBar view="Dashboard" :user="user" />
+    <div class="flex flex-row flex-wrap m-3">
       <datasetElement v-for="dataset in datasets" :data="dataset" />
     </div>
   </main>
