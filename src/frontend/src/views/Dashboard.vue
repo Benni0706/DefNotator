@@ -6,7 +6,6 @@ import navBar from '../components/navBar.vue';
 const props = defineProps(['user']);
 
 const datasets = ref<JSON>();
-const datasetFieldToggle = ref<Boolean>(false);
 const error = ref<String>(" ");
 
 let datasetName: string = "";
@@ -32,6 +31,9 @@ async function addDataset() {
     const api_url = import.meta.env.VITE_API_URL + '/datasets/add';
     let data = await fetch(api_url, {
       method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
       credentials: "include",
       body: JSON.stringify({ name: datasetName })
     });
