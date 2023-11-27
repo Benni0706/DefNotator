@@ -12,44 +12,12 @@ const error = ref<String>(" ");
 let datasetName: string = "";
 
 async function getDatasets() {
-  /*try {
-    const api_url = import.meta.env.VITE_API_URL + '/users/datasets';
-    let data = await fetch(api_url, {
-      method: "GET",
-      credentials: "include"
-    });
-    if (data.ok) {
-      datasets.value = await data.json();
-    }
-  }
-  catch (err: any) {
-    console.log(err);
-  }*/
   const response = await axios.get("/users/datasets");
   console.log({data: response.data});
   datasets.value = response.data;
 }
 
 async function addDataset() {
-  /*try {
-    const api_url = import.meta.env.VITE_API_URL + '/datasets/add';
-    let data = await fetch(api_url, {
-      method: "POST",
-      headers: {
-        "Content-Type": 'application/json'
-      },
-      credentials: "include",
-      body: JSON.stringify({ name: datasetName })
-    });
-    if (data.ok) {
-      getDatasets();
-    } else if (data.status == 400) {
-      error.value = "Please pick another name."
-    }
-  }
-  catch (err: any) {
-    console.log(err);
-  }*/
   const response = await axios.post("/datasets/add", { name: datasetName }, { validateStatus: null });
   if (response.status == HttpStatusCode.Ok) {
     getDatasets();
