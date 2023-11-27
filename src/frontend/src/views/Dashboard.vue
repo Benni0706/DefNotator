@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import datasetElement from '../components/datasetElement.vue';
 import navBar from '../components/navBar.vue';
+import axios, { HttpStatusCode } from 'axios';
 
 const props = defineProps(['user']);
 
@@ -11,7 +12,7 @@ const error = ref<String>(" ");
 let datasetName: string = "";
 
 async function getDatasets() {
-  try {
+  /*try {
     const api_url = import.meta.env.VITE_API_URL + '/users/datasets';
     let data = await fetch(api_url, {
       method: "GET",
@@ -23,11 +24,14 @@ async function getDatasets() {
   }
   catch (err: any) {
     console.log(err);
-  }
+  }*/
+  const response = await axios.get("/users/datasets");
+  console.log({data: response.data});
+  datasets.value = response.data;
 }
 
 async function addDataset() {
-  try {
+  /*try {
     const api_url = import.meta.env.VITE_API_URL + '/datasets/add';
     let data = await fetch(api_url, {
       method: "POST",
@@ -45,6 +49,12 @@ async function addDataset() {
   }
   catch (err: any) {
     console.log(err);
+  }*/
+  const response = await axios.post("/datasets/add", { name: datasetName }, { validateStatus: null });
+  if (response.status == HttpStatusCode.Ok) {
+    getDatasets();
+  } else if (response.status == HttpStatusCode.BadRequest) {
+      error.value = "Please pick another name."
   }
 }
 
