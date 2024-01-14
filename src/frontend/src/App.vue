@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import { ref } from 'vue';
-import router from './router';
 import axios, { HttpStatusCode } from 'axios';
+import router from './router';
+import defnotatorLogo from "./assets/logo.svg";
 
 let logged_in = ref<boolean>(true);
 const user = ref(null);
@@ -59,16 +60,19 @@ async function login() {
     </div>
     <div v-else class="grid items-center justify-center w-full h-screen">
       <div>
-        <p class="mb-8 text-3xl font-bold text-center">DefNotator</p>
+        <p class="mb-8 text-3xl font-bold text-center flex place-content-center gap-1">
+          <img class="h-10" :src="defnotatorLogo" alt="" />
+          DefNotator
+        </p>
         <div class="p-4 bg-gray-300 rounded-lg">
           <p class="mb-2">Bitte melde dich an, um fortzufahren:</p>
           <p class="font-bold text-red-600">{{ login_message }}</p>
           <form @submit.prevent="login" class="grid justify-center">
             <label>Nutzername</label>
-            <input type="text" required v-model="username">
+            <input class="rounded-md px-1 py-px" type="text" required v-model="username">
             <label>Password</label>
-            <input type="password" required v-model="password">
-            <button class="bg-gray-700 hover:bg-gray-800 text-white px-2 py-0.5 mt-2">Login</button>
+            <input class="rounded-md px-1 py-px" type="password" required v-model="password">
+            <button class="bg-gray-700 hover:bg-gray-800 text-white px-2 py-0.5 mt-2 rounded-md">Login</button>
           </form>
         </div>
       </div>
