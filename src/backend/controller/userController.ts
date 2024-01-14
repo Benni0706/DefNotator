@@ -5,20 +5,20 @@ import { randomBytes, pbkdf2Sync } from "crypto";
 const prisma = new PrismaClient();
 
 const addUser = async (req: Request, res: Response) => {
-    if (req.query.name && req.query.password && req.query.email) {
+    if (req.body.name && req.body.password && req.body.email) {
         const user = await prisma.user.findUnique({
             where: {
-                name: req.query.name.toString()
+                name: req.body.name.toString()
             }
         });
         if (!user) {
             const token: string = randomBytes(256).toString('hex');
             const salt = randomBytes(16).toString('hex');
-            const passwordHash = pbkdf2Sync(req.query.password.toString(), salt, 1000, 64, `sha512`).toString(`hex`);
+            const passwordHash = pbkdf2Sync(req.body.password.toString(), salt, 1000, 64, `sha512`).toString(`hex`);
             const newuser = await prisma.user.create({
                 data: {
-                    name: req.query.name.toString(),
-                    email: req.query.email.toString(),
+                    name: req.body.name.toString(),
+                    email: req.body.email.toString(),
                     password: passwordHash,
                     salt: salt,
                     sessionToken: token

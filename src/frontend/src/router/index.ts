@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from '../views/Dashboard.vue';
+import Account from '../views/Account.vue';
 import Annotations from '../views/Annotations.vue';
 import Annotator from '../views/Annotator.vue';
 import Criteria from '../views/Criteria.vue';
 import Dataset from '../views/Dataset.vue';
 import Definitions from '../views/Definitions.vue';
+import NotFound from "../views/404.vue";
 import {defineAsyncComponent} from "vue";
 
 const router = createRouter({
@@ -44,7 +46,12 @@ const router = createRouter({
       path: '/Definitions',
       name: 'Definitions',
       component: Definitions,
-    }
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: 'NotFound',
+      component: NotFound,
+    },
   ]
 });
 

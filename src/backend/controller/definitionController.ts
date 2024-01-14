@@ -4,10 +4,10 @@ import { Request, Response } from "express";
 const prisma = new PrismaClient();
 
 const addDefinition = async (req: Request, res: Response) => {
-    if (req.query.content) {
+    if (req.body.content) {
         await prisma.definition.create({
             data: {
-                content: req.query.content.toString()
+                content: req.body.content.toString()
             }
         });
         res.end();
@@ -17,27 +17,27 @@ const addDefinition = async (req: Request, res: Response) => {
 }
 
 const assignDefinition = async (req: Request, res: Response) => {
-    if (!isNaN(Number(req.query.definitionId)) && req.query.datasetName) {
+    if (!isNaN(Number(req.body.definitionId)) && req.body.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
                 user: {
                     id: res.locals.userId
                 },
                 dataset: {
-                    name: req.query.datasetName.toString()
+                    name: req.body.datasetName.toString()
                 }
             }
         });
         if (access) {
             await prisma.definition.update({
                 where: {
-                    id: Number(req.query.definitionId)
+                    id: Number(req.body.definitionId)
                 },
                 data: {
                     datasets: {
                         connect: [
                             {
-                                name: req.query.datasetName.toString()
+                                name: req.body.datasetName.toString()
                             }
                         ]
                     }
@@ -53,27 +53,27 @@ const assignDefinition = async (req: Request, res: Response) => {
 }
 
 const unassignDefinition = async (req: Request, res: Response) => {
-    if (!isNaN(Number(req.query.definitionId)) && req.query.datasetName) {
+    if (!isNaN(Number(req.body.definitionId)) && req.body.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
                 user: {
                     id: res.locals.userId
                 },
                 dataset: {
-                    name: req.query.datasetName.toString()
+                    name: req.body.datasetName.toString()
                 }
             }
         });
         if (access) {
             await prisma.definition.update({
                 where: {
-                    id: Number(req.query.definitionId)
+                    id: Number(req.body.definitionId)
                 },
                 data: {
                     datasets: {
                         disconnect: [
                             {
-                                name: req.query.datasetName.toString()
+                                name: req.body.datasetName.toString()
                             }
                         ]
                     }
