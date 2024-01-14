@@ -16,7 +16,7 @@ const router = createRouter({
       component: Dashboard
     },
     {
-      path: '/Account',
+      path: '/Account/:userName',
       name: 'Account',
       component: Account
     },
@@ -36,7 +36,7 @@ const router = createRouter({
       component: Criteria
     },
     {
-      path: '/Dataset',
+      path: '/dataset/:datasetName',
       name: 'Dataset',
       component: Dataset
     },

@@ -44,7 +44,7 @@ async function login() {
 <template>
   <main>
     <div v-if="logged_in && user">
-      <RouterView />
+      <RouterView :user="user" />
     </div>
     <div v-else-if="!logged_in && !user" class="grid items-center justify-center w-full h-screen">
       <div class="text-center">

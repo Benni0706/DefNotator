@@ -4,16 +4,16 @@ import { Request, Response } from "express";
 const prisma = new PrismaClient();
 
 const addDataset = async (req: Request, res: Response) => {
-    if (req.query.name) {
+    if (req.body.name) {
         const existingDataset = await prisma.dataset.findUnique({
             where: {
-                name: req.query.name.toString()
+                name: req.body.name
             }
         });
         if (!existingDataset) {
             const newDataset = await prisma.dataset.create({
                 data: {
-                    name: req.query.name.toString(),
+                    name: req.body.name,
                     access: {
                         create: [
                             {
@@ -30,7 +30,7 @@ const addDataset = async (req: Request, res: Response) => {
             });
             res.end();
         } else {
-            res.send('please pick another name');
+            res.status(400).send('please pick another name');
         }
     } else {
         res.status(400).send('parameter missing');
