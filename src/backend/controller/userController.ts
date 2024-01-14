@@ -48,6 +48,20 @@ const getUser = async (req: Request, res: Response) => {
     res.send(user);
 }
 
+const getUserByName = async (req: Request, res: Response) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            name: req.params.userName,
+        },
+        select: {
+            id: true,
+            name: true,
+            // email: true,
+        },
+    });
+    res.send(user);
+}
+
 const login = async (req: Request, res: Response) => {
     if (req.body.name && req.body.password) {
         const user = await prisma.user.findUnique({
@@ -140,6 +154,7 @@ const getDatasetsFromUser = async (req: Request, res: Response) => {
 module.exports = {
     addUser,
     getUser,
+    getUserByName,
     login,
     logout,
     deleteUser,
