@@ -1,0 +1,26 @@
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" color-interpolation-filters="sRGB" style="margin:auto" viewBox="140 81 60 60">
+    <g transform="translate(140 82.5)" fill="#333">
+        <path class="image-rect" fill="none" d="M0 0h60v56.957H0z"/>
+        <svg width="60" height="56.957" style="overflow:visible">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88.52 84.03">
+                <defs>
+                    <linearGradient id="a" x1="34.86" y1="2102.48" x2="88.52" y2="2102.48" gradientTransform="matrix(1 0 0 -1 0 2122.8)" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#00abeb"/>
+                        <stop offset="1" stop-color="#00426f"/>
+                    </linearGradient>
+                    <linearGradient id="b" x1="56.79" y1="2072.24" x2="63.5" y2="2022.02" href="#a"/>
+                    <linearGradient id="c" x1="15.84" y1="2051" x2="14.34" y2="2121.34" href="#a"/>
+                    <linearGradient id="d" x1="30.76" y1="2083.79" x2="51.7" y2="2115.72" href="#a"/>
+                    <linearGradient id="f" x1="54.47" y1="2068.8" x2="18.92" y2="2068.8" href="#a"/>
+                    <radialGradient id="e" cx="58.52" cy="2100.26" r="52.84" gradientTransform="matrix(1 0 0 -1 0 2122.8)" href="#a"/>
+                </defs>
+                <path fill="url(#a)" d="M77.01 0 34.86 2.86l26.83 18.89 26.83 18.89L77.01 0z"/>
+                <path fill="url(#b)" d="M69.21 84.03 87.82 46.1 58.04 59.9 28.26 73.69l40.95 10.34z"/>
+                <path fill="url(#c)" d="m0 35.24 23.49 35.12 2.99-32.69L29.47 5 0 35.24z"/>
+                <path fill="url(#d)" d="m34.86 2.86-2.95 32.68 29.78-13.79L34.86 2.86z"/>
+                <path fill="url(#e)" d="m60.98 27.21-2.94 32.68 29.78-13.78-26.84-18.9z"/>
+                <path fill="url(#f)" d="m26.45 37.65-2.94 32.68 29.77-13.79-26.83-18.89z"/>
+            </svg>
+        </svg>
+    </g>
+</svg>
