@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 const prisma = new PrismaClient();
 
 const addAccess = async (req: Request, res: Response) => {
-    if (req.query.userName && req.query.datasetName) {
+    if (req.body.userName && req.body.datasetName) {
         const userAccess = await prisma.access.findFirst({
             where: {
                 user: {
@@ -12,7 +12,7 @@ const addAccess = async (req: Request, res: Response) => {
                 },
                 role: "OWNER",
                 dataset: {
-                    name: req.query.datasetName.toString()
+                    name: req.body.datasetName.toString()
                 }
             }
         });
@@ -21,12 +21,12 @@ const addAccess = async (req: Request, res: Response) => {
                 data: {
                     user: {
                         connect: {
-                            name: req.query.userName.toString()
+                            name: req.body.userName.toString()
                         }
                     },
                     dataset: {
                         connect: {
-                            name: req.query.datasetName.toString()
+                            name: req.body.datasetName.toString()
                         }
                     }
                 }
@@ -41,37 +41,37 @@ const addAccess = async (req: Request, res: Response) => {
 }
 
 const deleteAccess = async (req: Request, res: Response) => {
-    if (req.query.userName && req.query.datasetName) {
+    if (req.body.userName && req.body.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
                 user: {
                     id: res.locals.userId
                 },
                 dataset: {
-                    name: req.query.datasetName.toString()
+                    name: req.body.datasetName.toString()
                 }
             }
         });
         if (access) {
-            if (access.role == 'OWNER' && res.locals.userName != req.query.userName) {
+            if (access.role == 'OWNER' && res.locals.userName != req.body.userName) {
                 await prisma.access.deleteMany({
                     where: {
                         user: {
-                            name: req.query.userName.toString()
+                            name: req.body.userName.toString()
                         },
                         dataset: {
-                            name: req.query.datasetName.toString()
+                            name: req.body.datasetName.toString()
                         }
                     }
                 });
-            } else if (access.role == 'USER' && res.locals.userName == req.query.userName ) {
+            } else if (access.role == 'USER' && res.locals.userName == req.body.userName ) {
                 await prisma.access.deleteMany({
                     where: {
                         user: {
                             id: res.locals.userId
                         },
                         dataset: {
-                            name: req.query.datasetName.toString()
+                            name: req.body.datasetName.toString()
                         }
                     }
                 });

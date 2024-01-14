@@ -4,14 +4,14 @@ import { Request, Response } from "express";
 const prisma = new PrismaClient();
 
 const addAnnotation = async (req: Request, res: Response) => {
-    if (Number(req.query.criteriaId) && Number(req.query.definitionId) && req.query.datasetName && req.query.applies) {
+    if (Number(req.body.criteriaId) && Number(req.body.definitionId) && req.body.datasetName && req.body.applies) {
         const access = await prisma.access.findFirst({
             where: {
                 user: {
                     id: res.locals.userId
                 },
                 dataset: {
-                    name: req.query.datasetName.toString()
+                    name: req.body.datasetName.toString()
                 }
             }
         });
@@ -19,13 +19,13 @@ const addAnnotation = async (req: Request, res: Response) => {
             const annotation = await prisma.annotation.count({
                 where: {
                     criteria: {
-                        id: Number(req.query.criteriaId)
+                        id: Number(req.body.criteriaId)
                     },
                     definition: {
-                        id: Number(req.query.definitionId)
+                        id: Number(req.body.definitionId)
                     },
                     dataset: {
-                        name: req.query.datasetName.toString()
+                        name: req.body.datasetName.toString()
                     },
                     user: {
                         id: res.locals.userId
@@ -37,17 +37,17 @@ const addAnnotation = async (req: Request, res: Response) => {
                     data: {
                         criteria: {
                             connect: {
-                                id: Number(req.query.criteriaId)
+                                id: Number(req.body.criteriaId)
                             }
                         },
                         definition: {
                             connect: {
-                                id: Number(req.query.definitionId)
+                                id: Number(req.body.definitionId)
                             }
                         },
                         dataset: {
                             connect: {
-                                name: req.query.datasetName.toString()
+                                name: req.body.datasetName.toString()
                             }
                         },
                         user: {
@@ -55,7 +55,7 @@ const addAnnotation = async (req: Request, res: Response) => {
                                 id: res.locals.userId
                             }
                         },
-                        applies: req.query.applies === 'true' ? true : false
+                        applies: req.body.applies === 'true' ? true : false
                     }
                 });
             } else {
@@ -71,10 +71,10 @@ const addAnnotation = async (req: Request, res: Response) => {
 }
 
 const updateAnnotation = async (req: Request, res: Response) => {
-    if (Number(req.query.annotationId) && req.query.applies) {
+    if (Number(req.body.annotationId) && req.body.applies) {
         const access = await prisma.annotation.findFirst({
             where: {
-                id: Number(req.query.annotationId),
+                id: Number(req.body.annotationId),
                 user: {
                     id: res.locals.userId
                 }
@@ -83,10 +83,10 @@ const updateAnnotation = async (req: Request, res: Response) => {
         if (access) {
             const annotation = await prisma.annotation.update({
                 where: {
-                    id: Number(req.query.annotationId)
+                    id: Number(req.body.annotationId)
                 },
                 data: {
-                    applies: req.query.applies === 'true' ? true : false
+                    applies: req.body.applies === 'true' ? true : false
                 }
             });
             console.log('ey')

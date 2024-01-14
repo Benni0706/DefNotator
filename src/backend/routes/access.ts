@@ -7,6 +7,8 @@ const express = require('express');
 const router = express.Router();
 
 router.use(cookieParser());
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 router.use(getUserId);
 
 router.post('/add', addAccess)

@@ -4,10 +4,10 @@ import { Request, Response } from "express";
 const prisma = new PrismaClient();
 
 const addCriteria = async (req: Request, res: Response) => {
-    if (req.query.content) {
+    if (req.body.content) {
         await prisma.criteria.create({
             data: {
-                content: req.query.content.toString()
+                content: req.body.content.toString()
             }
         });
         res.end();
@@ -17,27 +17,27 @@ const addCriteria = async (req: Request, res: Response) => {
 }
 
 const assignCriteria= async (req: Request, res: Response) => {
-    if (!isNaN(Number(req.query.criteriaId)) && req.query.datasetName) {
+    if (!isNaN(Number(req.body.criteriaId)) && req.body.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
                 user: {
                     id: res.locals.userId
                 },
                 dataset: {
-                    name: req.query.datasetName.toString()
+                    name: req.body.datasetName.toString()
                 }
             }
         });
         if (access) {
             await prisma.criteria.update({
                 where: {
-                    id: Number(req.query.criteriaId)
+                    id: Number(req.body.criteriaId)
                 },
                 data: {
                     datasets: {
                         connect: [
                             {
-                                name: req.query.datasetName.toString()
+                                name: req.body.datasetName.toString()
                             }
                         ]
                     }
@@ -53,27 +53,27 @@ const assignCriteria= async (req: Request, res: Response) => {
 }
 
 const unassignCriteria = async (req: Request, res: Response) => {
-    if (!isNaN(Number(req.query.criteriaId)) && req.query.datasetName) {
+    if (!isNaN(Number(req.body.criteriaId)) && req.body.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
                 user: {
                     id: res.locals.userId
                 },
                 dataset: {
-                    name: req.query.datasetName.toString()
+                    name: req.body.datasetName.toString()
                 }
             }
         });
         if (access) {
             await prisma.criteria.update({
                 where: {
-                    id: Number(req.query.criteriaId)
+                    id: Number(req.body.criteriaId)
                 },
                 data: {
                     datasets: {
                         disconnect: [
                             {
-                                name: req.query.datasetName.toString()
+                                name: req.body.datasetName.toString()
                             }
                         ]
                     }
