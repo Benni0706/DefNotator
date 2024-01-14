@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import datasetElement from '../components/datasetElement.vue';
-import navBar from '../components/navBar.vue';
+import NavBar from '../components/NavBar.vue';
 import axios, { HttpStatusCode } from 'axios';
 
 const props = defineProps(['user']);
@@ -30,8 +30,8 @@ getDatasets();
 </script>
 
 <template>
-  <main class="m-4">
-    <navBar view="Dashboard" :user="user" />
+  <main>
+    <NavBar view="Dashboard" :user="user" />
     <div class="bg-slate-400 rounded-xl mt-4 p-2">
       <div class="flex ms-1">
         <h2 class="text-xl font-bold">Your Datasets:</h2>
