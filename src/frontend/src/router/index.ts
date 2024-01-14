@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from '../views/Dashboard.vue';
-import Account from '../views/Account.vue';
 import Annotations from '../views/Annotations.vue';
 import Annotator from '../views/Annotator.vue';
 import Criteria from '../views/Criteria.vue';
