@@ -10,7 +10,6 @@ const user = ref(null);
 
 async function getUser() {
   const response = await axios.get("/users");
-  console.log({data: response.data});
   user.value = response.data;
   logged_in.value = true;
 }
