@@ -6,6 +6,7 @@ import Annotator from '../views/Annotator.vue';
 import Criteria from '../views/Criteria.vue';
 import Dataset from '../views/Dataset.vue';
 import Definitions from '../views/Definitions.vue';
+import NotFound from "../views/404.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,7 +45,12 @@ const router = createRouter({
       path: '/Definitions',
       name: 'Definitions',
       component: Definitions
-    }
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: 'NotFound',
+      component: NotFound,
+    },
   ]
 });
 
