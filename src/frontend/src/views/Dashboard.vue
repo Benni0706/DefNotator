@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import datasetElement from '../components/datasetElement.vue';
+import datasetElement from '../components/DatasetElement.vue';
 import NavBar from '../components/NavBar.vue';
 import axios, { HttpStatusCode } from 'axios';
 
