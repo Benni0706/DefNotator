@@ -4,34 +4,31 @@ import datasetElement from '../components/DatasetElement.vue';
 import NavBar from '../components/NavBar.vue';
 import axios, { HttpStatusCode } from 'axios';
 
-const props = defineProps(['user']);
-
 const datasets = ref<JSON>();
 const error = ref<String>(" ");
 
 let datasetName: string = "";
 
-async function getDatasets() {
+async function updateDatasets() {
   const response = await axios.get("/users/datasets");
-  console.log({data: response.data});
   datasets.value = response.data;
 }
 
 async function addDataset() {
   const response = await axios.post("/datasets/add", { name: datasetName }, { validateStatus: null });
   if (response.status == HttpStatusCode.Ok) {
-    getDatasets();
+    await updateDatasets();
   } else if (response.status == HttpStatusCode.BadRequest) {
-      error.value = "Please pick another name."
+    error.value = "Please pick another name."
   }
 }
 
-getDatasets();
+await updateDatasets();
 </script>
 
 <template>
   <main>
-    <NavBar view="Dashboard" :user="user" />
+    <NavBar view="Dashboard" />
     <div class="bg-slate-400 rounded-xl mt-4 p-2">
       <div class="flex ms-1">
         <h2 class="text-xl font-bold">Your Datasets:</h2>
