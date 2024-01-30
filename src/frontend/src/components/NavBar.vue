@@ -21,7 +21,7 @@ const currentUser = inject<CurrentUser>("currentUser")!;
     <div class="text-2xl ml-auto p-2 group relative">
       <Avatar class="h-10 bg-white" :username="currentUser.username.value" />
       <div class="invisible group-hover:visible absolute top-full right-0 bg-slate-400 flex flex-col gap-1 px-2 py-1 rounded-bl-md">
-        <router-link class="hover:underline" :to="{ name: 'Account', params: { userName: currentUser.username.value }}">Profile</router-link>
+        <router-link class="hover:underline" :to="{ name: 'Account', params: { username: currentUser.username.value }}">Profile</router-link>
         <button class="hover:underline" @click="currentUser.logout">Logout</button>
       </div>
     </div>

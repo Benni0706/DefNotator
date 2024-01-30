@@ -7,7 +7,7 @@ import Avatar from "@/components/Avatar.vue";
 
 const route = useRoute();
 
-const username: string = route.params.userName.toString();
+const username: string = route.params.username.toString();
 
 const response = await axios.get(`/users/by-name/${encodeURIComponent(username)}`, { validateStatus: null });
 </script>
