@@ -8,6 +8,7 @@ import Definitions from '../views/Definitions.vue';
 import NotFound from "../views/404.vue";
 import {defineAsyncComponent} from "vue";
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -22,17 +23,17 @@ const router = createRouter({
       component: defineAsyncComponent(() => import("../views/Account.vue")),
     },
     {
-      path: '/Annotations',
+      path: '/annotations',
       name: 'Annotations',
       component: Annotations,
     },
     {
-      path: '/Annotator',
+      path: '/annotator',
       name: 'Annotator',
       component: Annotator,
     },
     {
-      path: '/Criteria',
+      path: '/criteria',
       name: 'Criteria',
       component: Criteria,
     },
@@ -42,7 +43,7 @@ const router = createRouter({
       component: Dataset,
     },
     {
-      path: '/Definitions',
+      path: '/definitions',
       name: 'Definitions',
       component: Definitions,
     },
@@ -54,7 +55,7 @@ const router = createRouter({
   ]
 });
 
-router.beforeEach((to, from) => {
+router.beforeEach((to, _) => {
   if (to.name) {
     document.title = `DefNotator - ${to.name.toString()}`;
   } else {
