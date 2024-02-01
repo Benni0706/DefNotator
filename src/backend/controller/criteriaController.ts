@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-const addCriteria = async (req: Request, res: Response) => {
+export const addCriteria = async (req: Request, res: Response) => {
     if (req.body.content) {
         await prisma.criteria.create({
             data: {
@@ -16,7 +16,7 @@ const addCriteria = async (req: Request, res: Response) => {
     }
 }
 
-const assignCriteria= async (req: Request, res: Response) => {
+export const assignCriteria = async (req: Request, res: Response) => {
     if (!isNaN(Number(req.body.criteriaId)) && req.body.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
@@ -52,7 +52,7 @@ const assignCriteria= async (req: Request, res: Response) => {
     }
 }
 
-const unassignCriteria = async (req: Request, res: Response) => {
+export const unassignCriteria = async (req: Request, res: Response) => {
     if (!isNaN(Number(req.body.criteriaId)) && req.body.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
@@ -88,12 +88,12 @@ const unassignCriteria = async (req: Request, res: Response) => {
     }
 }
 
-const getCriteria = async (req: Request, res: Response) => {
+export const getCriteria = async (req: Request, res: Response) => {
     const criteria = await prisma.criteria.findMany();
     res.send(criteria);
 }
 
-const getCriterion = async (req: Request, res: Response) => {
+export const getCriterion = async (req: Request, res: Response) => {
     if (!isNaN(Number(req.params.criteriaId))) {
         const criteria = await prisma.criteria.findUnique({
             where: {
@@ -104,12 +104,4 @@ const getCriterion = async (req: Request, res: Response) => {
     } else {
         res.status(400).end();
     }
-}
-
-module.exports = {
-    addCriteria,
-    assignCriteria,
-    unassignCriteria,
-    getCriteria,
-    getCriterion
 }

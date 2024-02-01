@@ -1,14 +1,13 @@
-import { getUserId } from '../modules/sessionTokenMiddleware';
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import {getUserId} from '../modules/sessionTokenMiddleware';
+import {addDataset, getDefinitionsFromDataset, getCriteriaFromDataset, deleteDataset, getUserFromDataset} from '../controller/datasetController';
 
-const { addDataset, getDefinitionsFromDataset, getCriteriaFromDataset, deleteDataset, getUserFromDataset } = require('../controller/datasetController');
-const cookieParser = require('cookie-parser');
-const express = require('express');
-
-const router = express.Router();
+export const router = express.Router();
 
 router.use(cookieParser());
 router.use(express.json());
-router.use(express.urlencoded({ extended: true }));
+router.use(express.urlencoded({extended: true}));
 router.use(getUserId);
 
 router.post('/add', addDataset);
@@ -16,5 +15,3 @@ router.get('/:datasetName/definitions', getDefinitionsFromDataset);
 router.get('/:datasetName/criteria', getCriteriaFromDataset);
 router.delete('/:datasetName', deleteDataset);
 router.get('/:datasetName/user', getUserFromDataset);
-
-module.exports = router;

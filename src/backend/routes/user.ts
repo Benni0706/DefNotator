@@ -1,9 +1,9 @@
+import express from 'express';
+import cookieParser from 'cookie-parser';
 import { getUserId } from '../modules/sessionTokenMiddleware';
+import { addUser, getUser, getUserByName, login, logout, deleteUser, getDatasetsFromUser } from '../controller/userController';
 
-const { addUser, getUser, getUserByName, login, logout, deleteUser, getDatasetsFromUser } = require('../controller/userController');
-const cookieParser = require('cookie-parser');
-const express = require('express');
-const router = express.Router();
+export const router = express.Router();
 
 router.use(cookieParser());
 router.use(express.json());
@@ -16,5 +16,3 @@ router.post('/logout', getUserId, logout);
 router.delete('/', getUserId, deleteUser);
 router.get('/datasets', getUserId, getDatasetsFromUser);
 router.get('/by-name/:userName', getUserByName);
-
-module.exports = router;

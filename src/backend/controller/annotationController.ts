@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-const addAnnotation = async (req: Request, res: Response) => {
+export const addAnnotation = async (req: Request, res: Response) => {
     if (Number(req.body.criteriaId) && Number(req.body.definitionId) && req.body.datasetName && req.body.applies) {
         const access = await prisma.access.findFirst({
             where: {
@@ -55,7 +55,7 @@ const addAnnotation = async (req: Request, res: Response) => {
                                 id: res.locals.userId
                             }
                         },
-                        applies: req.body.applies === 'true' ? true : false
+                        applies: req.body.applies === 'true'
                     }
                 });
             } else {
@@ -70,7 +70,7 @@ const addAnnotation = async (req: Request, res: Response) => {
     }
 }
 
-const updateAnnotation = async (req: Request, res: Response) => {
+export const updateAnnotation = async (req: Request, res: Response) => {
     if (Number(req.body.annotationId) && req.body.applies) {
         const access = await prisma.annotation.findFirst({
             where: {
@@ -86,7 +86,7 @@ const updateAnnotation = async (req: Request, res: Response) => {
                     id: Number(req.body.annotationId)
                 },
                 data: {
-                    applies: req.body.applies === 'true' ? true : false
+                    applies: req.body.applies === 'true'
                 }
             });
             console.log('ey')
@@ -99,7 +99,7 @@ const updateAnnotation = async (req: Request, res: Response) => {
     }
 }
 
-const getAnnotation = async (req: Request, res: Response) => {
+export const getAnnotation = async (req: Request, res: Response) => {
     if (Number(req.params.annotationId)) {
         const annotation = await prisma.annotation.findUnique({
             where: {
@@ -114,10 +114,4 @@ const getAnnotation = async (req: Request, res: Response) => {
     } else {
         res.status(400).send('parameter missing');
     }
-}
-
-module.exports = {
-    addAnnotation,
-    updateAnnotation,
-    getAnnotation
 }

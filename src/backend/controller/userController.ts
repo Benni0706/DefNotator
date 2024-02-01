@@ -4,7 +4,7 @@ import { randomBytes, pbkdf2Sync } from "crypto";
 
 const prisma = new PrismaClient();
 
-const addUser = async (req: Request, res: Response) => {
+export const addUser = async (req: Request, res: Response) => {
     if (req.body.name && req.body.password && req.body.email) {
         const user = await prisma.user.findUnique({
             where: {
@@ -34,7 +34,7 @@ const addUser = async (req: Request, res: Response) => {
     }
 }
 
-const getUser = async (req: Request, res: Response) => {
+export const getUser = async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({
         where: {
             id: res.locals.userId
@@ -48,7 +48,7 @@ const getUser = async (req: Request, res: Response) => {
     res.send(user);
 }
 
-const getUserByName = async (req: Request, res: Response) => {
+export const getUserByName = async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({
         where: {
             name: req.params.userName,
@@ -62,7 +62,7 @@ const getUserByName = async (req: Request, res: Response) => {
     res.send(user);
 }
 
-const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
     if (req.body.name && req.body.password) {
         const user = await prisma.user.findUnique({
             where: {
@@ -94,7 +94,7 @@ const login = async (req: Request, res: Response) => {
     }
 }
 
-const logout = async (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response) => {
     await prisma.user.update({
         where: {
             id: res.locals.userId
@@ -107,7 +107,7 @@ const logout = async (req: Request, res: Response) => {
     res.end();
 }
 
-const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({
         where: {
             id: res.locals.userId
@@ -132,7 +132,7 @@ const deleteUser = async (req: Request, res: Response) => {
     }
 }
 
-const getDatasetsFromUser = async (req: Request, res: Response) => {
+export const getDatasetsFromUser = async (req: Request, res: Response) => {
     const datasets = await prisma.access.findMany({
         where: {
             user: {
@@ -149,14 +149,4 @@ const getDatasetsFromUser = async (req: Request, res: Response) => {
         }
     });
     res.send(datasets);
-}
-
-module.exports = {
-    addUser,
-    getUser,
-    getUserByName,
-    login,
-    logout,
-    deleteUser,
-    getDatasetsFromUser
 }
