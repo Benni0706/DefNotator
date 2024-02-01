@@ -159,6 +159,27 @@ const getUserFromDataset = async (req: Request, res: Response) => {
     }
 }
 
+export const getAvailableDatasets = async (req: Request, res: Response) => {
+    const accesses = await prisma.access.findMany({
+        where: {
+            user: {
+                id: res.locals.userid
+            }
+        },
+        select: {
+            datasetId: true,
+        }
+    });
+    const datasets = await prisma.dataset.findMany({
+        where: {
+            id: {
+                in: accesses.map(access => access.datasetId)
+            }
+        }
+    });
+    res.send(datasets);
+}
+
 module.exports = {
     addDataset,
     getDefinitionsFromDataset,
