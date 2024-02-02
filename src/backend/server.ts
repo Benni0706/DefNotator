@@ -1,8 +1,7 @@
-import { Application } from "express";
+import express, { Application } from 'express';
+import cors from 'cors';
 
-const express = require('express');
 const app: Application = express();
-const cors = require('cors');
 
 const port = 3000;
 const hostname = 'localhost';
@@ -21,20 +20,13 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 //routes are being imported from route files
-const access = require('./routes/access');
-const user = require('./routes/user');
-const dataset = require('./routes/dataset');
-const criteria = require('./routes/criteria');
-const definition = require('./routes/definition');
-const annotation = require('./routes/annotation');
-
 //app "uses" routes with route prefix
-app.use('/access', access);
-app.use('/users', user);
-app.use('/datasets', dataset);
-app.use('/criteria', criteria);
-app.use('/definitions', definition);
-app.use('/annotations', annotation);
+app.use('/access', require('./routes/access'));
+app.use('/users', require('./routes/user'));
+app.use('/datasets', require('./routes/dataset'));
+app.use('/criteria', require('./routes/criteria'));
+app.use('/definitions', require('./routes/definition'));
+app.use('/annotations', require('./routes/annotation'));
 
 app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/ you look good today`);

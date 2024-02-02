@@ -1,10 +1,9 @@
+import express from 'express';
+import cookieParser from 'cookie-parser';
 import { getUserId } from '../modules/sessionTokenMiddleware';
+import {addAnnotation, updateAnnotation, getAnnotation} from '../controller/annotationController';
 
-const { addAnnotation, updateAnnotation, getAnnotation } = require('../controller/annotationController')
-const cookieParser = require('cookie-parser');
-const express = require('express');
-
-const router = express.Router();
+export const router = express.Router();
 
 router.use(cookieParser());
 router.use(express.json());
@@ -14,5 +13,3 @@ router.use(getUserId);
 router.post('/add', addAnnotation);
 router.post('/update', updateAnnotation);
 router.get('/:annotationId', getAnnotation);
-
-module.exports = router;

@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-const addDefinition = async (req: Request, res: Response) => {
+export const addDefinition = async (req: Request, res: Response) => {
     if (req.body.content) {
         await prisma.definition.create({
             data: {
@@ -16,7 +16,7 @@ const addDefinition = async (req: Request, res: Response) => {
     }
 }
 
-const assignDefinition = async (req: Request, res: Response) => {
+export const assignDefinition = async (req: Request, res: Response) => {
     if (!isNaN(Number(req.body.definitionId)) && req.body.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
@@ -52,7 +52,7 @@ const assignDefinition = async (req: Request, res: Response) => {
     }
 }
 
-const unassignDefinition = async (req: Request, res: Response) => {
+export const unassignDefinition = async (req: Request, res: Response) => {
     if (!isNaN(Number(req.body.definitionId)) && req.body.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
@@ -88,12 +88,12 @@ const unassignDefinition = async (req: Request, res: Response) => {
     }
 }
 
-const getDefinitions = async (req: Request, res: Response) => {
+export const getDefinitions = async (req: Request, res: Response) => {
     const definitions = await prisma.definition.findMany();
     res.send(definitions);
 }
 
-const getDefinition = async (req: Request, res: Response) => {
+export const getDefinition = async (req: Request, res: Response) => {
     if (!isNaN(Number(req.params.definitionId))) {
         const definition = await prisma.definition.findUnique({
             where: {
@@ -104,12 +104,4 @@ const getDefinition = async (req: Request, res: Response) => {
     } else {
         res.status(400).end();
     }
-}
-
-module.exports = {
-    addDefinition,
-    assignDefinition,
-    unassignDefinition,
-    getDefinitions,
-    getDefinition
 }

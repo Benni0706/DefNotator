@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-const addDataset = async (req: Request, res: Response) => {
+export const addDataset = async (req: Request, res: Response) => {
     if (req.body.name) {
         const existingDataset = await prisma.dataset.findUnique({
             where: {
@@ -37,7 +37,7 @@ const addDataset = async (req: Request, res: Response) => {
     }
 }
 
-const getDefinitionsFromDataset = async (req: Request, res: Response) => {
+export const getDefinitionsFromDataset = async (req: Request, res: Response) => {
     if (req.params.datasetName) {
         const definitions = await prisma.access.findFirst({
             where: {
@@ -66,7 +66,7 @@ const getDefinitionsFromDataset = async (req: Request, res: Response) => {
     }
 }
 
-const getCriteriaFromDataset = async (req: Request, res: Response) => {
+export const getCriteriaFromDataset = async (req: Request, res: Response) => {
     if (req.params.datasetName) {
         const criteria = await prisma.access.findFirst({
             where: {
@@ -95,7 +95,7 @@ const getCriteriaFromDataset = async (req: Request, res: Response) => {
     }
 }
 
-const deleteDataset = async (req: Request, res: Response) => {
+export const deleteDataset = async (req: Request, res: Response) => {
     if (req.params.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
@@ -122,7 +122,7 @@ const deleteDataset = async (req: Request, res: Response) => {
     }
 }
 
-const getUserFromDataset = async (req: Request, res: Response) => {
+export const getUserFromDataset = async (req: Request, res: Response) => {
     if (req.params.datasetName) {
         const access = await prisma.access.findFirst({
             where: {
@@ -157,12 +157,4 @@ const getUserFromDataset = async (req: Request, res: Response) => {
     } else {
         res.status(400).send('parameter missing');
     }
-}
-
-module.exports = {
-    addDataset,
-    getDefinitionsFromDataset,
-    getCriteriaFromDataset,
-    deleteDataset,
-    getUserFromDataset
 }
