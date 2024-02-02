@@ -3,6 +3,23 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
+export const getDataset = async (req: Request, res: Response) => {
+    const dataset = await prisma.dataset.findUnique({
+        where: {
+            name: req.params.datasetName
+        },
+        select: {
+            id: true,
+            name: true,
+        },
+    });
+    if (!dataset) {
+        res.status(404).send('dataset not found')
+    } else {
+        res.send(dataset);
+    }
+}
+
 export const addDataset = async (req: Request, res: Response) => {
     if (req.body.name) {
         const existingDataset = await prisma.dataset.findUnique({
@@ -82,6 +99,7 @@ export const getCriteriaFromDataset = async (req: Request, res: Response) => {
                     select: {
                         criteria: {
                             select: {
+                                id: true,
                                 content: true
                             }
                         }
