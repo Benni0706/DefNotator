@@ -43,7 +43,7 @@ const router = createRouter({
       component: Dataset,
     },
     {
-      path: '/definitions',
+      path: '/:datasetName/definitions',
       name: 'Definitions',
       component: Definitions,
     },

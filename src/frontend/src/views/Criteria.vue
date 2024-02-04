@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, computed, ref } from 'vue';
 import NavBar from '../components/NavBar.vue';
-import criterionElement from '../components/CriterionElement.vue';
+import listElement from '../components/ListElement.vue';
 import { useRoute } from "vue-router";
 import axios, { HttpStatusCode } from 'axios';
 
@@ -73,7 +73,7 @@ if (response.status == 200) {
     <div class="flex mt-2">
       <div class=" bg-slate-400 rounded-xl m-2 p-2 w-8/12">
         <h1 class="font-bold">Criteria assigned to this dataset:</h1>
-        <criterionElement @remove="unassignCriterion(criterion.id)" v-for="criterion in datasetCriteria" :data="criterion" />
+        <listElement @remove="unassignCriterion(criterion.id)" v-for="criterion in datasetCriteria" :data="criterion" />
       </div>
       <div class="bg-slate-400 rounded-xl m-2 p-2 w-1/3">
         <div class="flex m-1">

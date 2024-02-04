@@ -6,6 +6,8 @@ import { addDefinition, assignDefinition, unassignDefinition, getDefinitions, ge
 export const router = express.Router();
 
 router.use(cookieParser());
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 router.use(getUserId);
 
 router.post('/add', addDefinition);
