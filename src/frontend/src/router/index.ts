@@ -33,7 +33,7 @@ const router = createRouter({
       component: Annotator,
     },
     {
-      path: '/criteria',
+      path: '/:datasetName/criteria',
       name: 'Criteria',
       component: Criteria,
     },

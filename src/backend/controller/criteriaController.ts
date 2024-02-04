@@ -5,12 +5,12 @@ const prisma = new PrismaClient();
 
 export const addCriteria = async (req: Request, res: Response) => {
     if (req.body.content) {
-        await prisma.criteria.create({
+        const criterion = await prisma.criteria.create({
             data: {
                 content: req.body.content.toString()
             }
         });
-        res.end();
+        res.send(criterion);
     } else {
         res.status(400).send('parameter missing');
     }
