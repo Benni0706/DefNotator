@@ -4,8 +4,11 @@ import NavBar from '../components/NavBar.vue';
 import listElement from '../components/ListElement.vue';
 import { useRoute } from "vue-router";
 import axios, { HttpStatusCode } from 'axios';
+import type { CurrentUser } from '@/types/provided';
 
-const props = defineProps(['user']);
+const props = defineProps<{
+  user: CurrentUser,
+}>();
 const route = useRoute();
 
 const datasetDefinitions = ref();
@@ -58,8 +61,10 @@ async function unassignDefinition(id: Number) {
 }
 
 if (response.status == 200) {
-  await getDatasetDefinitions();
-  await getAllDefinitions();
+  await Promise.all([
+    getDatasetDefinitions(),
+    getAllDefinitions(),
+  ])
 }
 </script>
 
