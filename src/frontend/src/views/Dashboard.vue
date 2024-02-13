@@ -43,7 +43,7 @@ await updateDatasets();
         <div class="grow" />
         <div class="bg-gray-300 rounded-xl p-1 hover:bg-gray-200 group">
           <div class="peer hidden group-hover:inline-block [&:not(:has(:placeholder-shown))]:inline-block">
-            <span v-if="error" class="text-red-700"> {{ error }}</span>
+            <span v-if="error" class="text-red-700">{{ error }}</span>
             <input v-model="datasetName" type="text" placeholder="Dataset Name" class="w-40 ml-auto rounded-xl px-1 text-xl mr-2">
             <button @click="addDataset" class=" text-xl bg-green-500 px-2 rounded-xl hover:bg-green-400">confirm</button>
           </div>
