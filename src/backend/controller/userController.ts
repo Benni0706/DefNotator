@@ -15,7 +15,7 @@ export const addUser = async (req: Request, res: Response) => {
             const token: string = randomBytes(256).toString('hex');
             const salt = randomBytes(16).toString('hex');
             const passwordHash = pbkdf2Sync(req.body.password.toString(), salt, 1000, 64, `sha512`).toString(`hex`);
-            const newuser = await prisma.user.create({
+            const newUser = await prisma.user.create({
                 data: {
                     name: req.body.name.toString(),
                     email: req.body.email.toString(),
@@ -24,7 +24,7 @@ export const addUser = async (req: Request, res: Response) => {
                     sessionToken: token
                 }
             });
-            res.cookie('sessionToken', newuser.sessionToken);
+            res.cookie('sessionToken', newUser.sessionToken);
             res.end();
         } else {
             res.status(404).send('please pick another name');
