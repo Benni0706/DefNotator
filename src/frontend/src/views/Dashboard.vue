@@ -17,7 +17,7 @@ async function updateDatasets() {
 async function addDataset() {
   const newDatasetName = datasetName.trim();
   if (!newDatasetName.length) {
-    error.value = "Please input anything";
+    error.value = "Bitte nicht leer lassen";
     return;
   }
   const response = await axios.post("/datasets/add", { name: newDatasetName }, { validateStatus: null });
@@ -25,9 +25,9 @@ async function addDataset() {
     await updateDatasets();
     error.value = "";
   } else if (response.status == HttpStatusCode.BadRequest) {
-    error.value = "Please pick another name.";
+    error.value = "Bitte wähle einen anderen Namen";
   } else {
-    error.value = "Something unexpected went wrong";
+    error.value = "Etwas unerwartetes ist schiefgegangen";
   }
 }
 
