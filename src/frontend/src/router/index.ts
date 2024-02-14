@@ -1,56 +1,53 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import Account from "@/views/Account.vue";
-import Annotations from '../views/Annotations.vue';
-import Annotator from '../views/Annotator.vue';
-import Criteria from '../views/Criteria.vue';
-import Dashboard from '../views/Dashboard.vue';
-import Dataset from '../views/Dataset.vue';
-import Definitions from '../views/Definitions.vue';
-import NotFound from "../views/404.vue";
+import {createRouter, createWebHashHistory} from 'vue-router';
 
 
+// `() => import(...)` for code splitting
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  // we only have one index.html file so WebHashHistory reduces problems with configuring the proxy-server
+  // https://domain.com/path
+  // history: createWebHistory(import.meta.env.BASE_URL),
+  // https://domain.com/#/path
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'Dashboard',
-      component: Dashboard,
+      component: () => import("@/views/Dashboard.vue"),
     },
     {
       path: '/account/:username',
       name: 'Account',
-      component: Account,
+      component: () => import("@/views/Account.vue"),
     },
     {
       path: '/annotations',
       name: 'Annotations',
-      component: Annotations,
+      component: () => import("@/views/Annotations.vue"),
     },
     {
       path: '/annotator',
       name: 'Annotator',
-      component: Annotator,
+      component: () => import("@/views/Annotator.vue"),
     },
     {
       path: '/:datasetName/criteria',
       name: 'Criteria',
-      component: Criteria,
+      component: () => import("@/views/Criteria.vue"),
     },
     {
       path: '/dataset/:datasetName',
       name: 'Dataset',
-      component: Dataset,
+      component: () => import("@/views/Dataset.vue"),
     },
     {
       path: '/definitions',
       name: 'Definitions',
-      component: Definitions,
+      component: () => import("@/views/Definitions.vue"),
     },
     {
       path: "/:pathMatch(.*)*",
       name: 'NotFound',
-      component: NotFound,
+      component: () => import("@/views/404.vue"),
     },
   ]
 });
