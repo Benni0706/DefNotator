@@ -1,11 +1,15 @@
 import random from "random";
 
-export function username2initials(username: string) {
+function username2initials(username: string) {
+    // "Random User" => "RU"
     return Array.from(username.matchAll(/\b\w/g)).join("").toUpperCase();
 }
 
-export function generateAvatar(text: string) {
-    const rand = random.clone(text);  // random number generator seeded with the text for same results
+export function generateAvatar(username: string) {
+    // random number generator seeded with the username for same results
+    // not seeded with initials to have different avatar for same initials but different username
+    const rand = random.clone(username);
+    const initials = username2initials(username);
 
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d")!;
@@ -22,7 +26,7 @@ export function generateAvatar(text: string) {
     context.fillStyle = `#${rand.int(0, 0xFFFFFF).toString(16).padStart(6, '0')}`;
     context.textAlign = "center";
     context.textBaseline = "middle";
-    context.fillText(text, canvas.width / 2, canvas.height / 2);
+    context.fillText(initials, canvas.width / 2, canvas.height / 2);
 
     return canvas.toDataURL("image/png");
 }
