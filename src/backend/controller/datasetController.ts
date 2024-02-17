@@ -70,6 +70,7 @@ export const getDefinitionsFromDataset = async (req: Request, res: Response) => 
                     select: {
                         definitions: {
                             select: {
+                                id: true,
                                 content: true
                             }
                         }

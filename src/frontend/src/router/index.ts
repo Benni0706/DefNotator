@@ -30,7 +30,7 @@ const router = createRouter({
       component: () => import("@/views/Annotator.vue"),
     },
     {
-      path: '/:datasetName/criteria',
+      path: '/dataset/:datasetName/criteria',
       name: 'Criteria',
       component: () => import("@/views/Criteria.vue"),
     },
@@ -40,7 +40,7 @@ const router = createRouter({
       component: () => import("@/views/Dataset.vue"),
     },
     {
-      path: '/definitions',
+      path: '/dataset/:datasetName/definitions',
       name: 'Definitions',
       component: () => import("@/views/Definitions.vue"),
     },

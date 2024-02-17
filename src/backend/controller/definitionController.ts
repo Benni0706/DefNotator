@@ -5,12 +5,12 @@ const prisma = new PrismaClient();
 
 export const addDefinition = async (req: Request, res: Response) => {
     if (req.body.content) {
-        await prisma.definition.create({
+        const definition = await prisma.definition.create({
             data: {
                 content: req.body.content.toString()
             }
         });
-        res.end();
+        res.send(definition);
     } else {
         res.status(400).send('parameter missing');
     }

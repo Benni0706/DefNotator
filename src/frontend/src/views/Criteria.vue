@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, computed, ref } from 'vue';
 import NavBar from '../components/NavBar.vue';
-import criterionElement from '../components/CriterionElement.vue';
+import ListElement from '../components/ListElement.vue';
 import { useRoute } from "vue-router";
 import axios, { HttpStatusCode } from 'axios';
 
@@ -10,7 +10,7 @@ const route = useRoute();
 
 const datasetCriteria = ref();
 const allCriteria = ref();
-const tab = ref<Number>(0);
+const tab = ref<number>(0);
 const selectedCriterion = ref()
 
 const datasetName: string = route.params.datasetName.toString();
@@ -35,8 +35,10 @@ async function addNewCriterion() {
     console.log(response.data)
     const response_assign = await axios.post("/criteria/assign", { criteriaId: response.data.id, datasetName: datasetName }, { validateStatus: null });
     if (response_assign.status == HttpStatusCode.Ok) {
-      getDatasetCriteria()
-      getAllCriteria()
+      await Promise.all([
+        await getDatasetCriteria(),
+        await getAllCriteria(),
+      ])
     }
   }
 }
@@ -44,22 +46,28 @@ async function addNewCriterion() {
 async function assignCriterion() {
   const response = await axios.post("/criteria/assign", { criteriaId: selectedCriterion.value.id, datasetName: datasetName }, { validateStatus: null });
   if (response.status == HttpStatusCode.Ok) {
-    getDatasetCriteria()
-    getAllCriteria()
+    await Promise.all([
+      await getDatasetCriteria(),
+      await getAllCriteria(),
+    ])
   }
 }
 
 async function unassignCriterion(id: Number) {
   const response = await axios.post("/criteria/unassign", { criteriaId: id, datasetName: datasetName }, { validateStatus: null });
   if (response.status == HttpStatusCode.Ok) {
-    getDatasetCriteria()
-    getAllCriteria()
+    await Promise.all([
+      await getDatasetCriteria(),
+      await getAllCriteria(),
+    ])
   }
 }
 
 if (response.status == 200) {
-  await getDatasetCriteria();
-  await getAllCriteria();
+  await Promise.all([
+    await getDatasetCriteria(),
+    await getAllCriteria(),
+  ])
 }
 </script>
 
@@ -73,7 +81,7 @@ if (response.status == 200) {
     <div class="flex mt-2">
       <div class=" bg-slate-400 rounded-xl m-2 p-2 w-8/12">
         <h1 class="font-bold">Criteria assigned to this dataset:</h1>
-        <criterionElement @remove="unassignCriterion(criterion.id)" v-for="criterion in datasetCriteria" :data="criterion" />
+        <ListElement @remove="unassignCriterion(criterion.id)" v-for="criterion in datasetCriteria" :data="criterion" />
       </div>
       <div class="bg-slate-400 rounded-xl m-2 p-2 w-1/3">
         <div class="flex m-1">
